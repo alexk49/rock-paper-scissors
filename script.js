@@ -16,18 +16,21 @@ function getHumanChoice () {
 
 function computerWins (playerChoice, computerChoice, computerScore) {
 // log computer winner
+  resultDiv.textContent = ('You lose: ' + computerChoice + ' beats ' + playerChoice)
   console.log('You lose!', computerChoice, 'beats:', playerChoice)
   return (computerScore += 1)
 }
 
 function playerWins (playerChoice, computerChoice, humanScore) {
 // log player winner
+  resultDiv.textContent = ('You win: ' + playerChoice + ' beats ' + computerChoice)
   console.log('You win!', playerChoice, 'beats:', computerChoice)
   return (humanScore += 1)
 }
 
 function draw (playerChoice, computerChoice) {
 // log draw
+  resultDiv.textContent = ("It's a draw - player went: " + playerChoice + ' and computer went: ' + computerChoice)
   console.log("It's a draw - player went:", playerChoice, 'and computer went', computerChoice)
 }
 
@@ -50,35 +53,48 @@ function playRound (playerChoice, computerChoice, playerScore, computerScore) {
 }
 
 function playGame () {
-// play whole game of 5 rounds
-// let round = 1
+  // play whole game of 5 rounds
+  let round = 1
 
   let playerScore = 0
   let computerScore = 0
 
-  // while (round < 5) {
-  console.log("let's play!")
+  while (round < 5) {
+    console.log("let's play!")
 
-  const computerChoice = getComputerChoice()
+    const computerChoice = getComputerChoice()
 
-  const playerChoice = getHumanChoice()
+    const playerChoice = getHumanChoice()
 
-  console.log('Computer choice:', computerChoice)
-  console.log('player choice:', playerChoice)
+    console.log('Computer choice:', computerChoice)
+    console.log('player choice:', playerChoice)
 
-  const scores = playRound(playerChoice, computerChoice, playerScore, computerScore)
+    const scores = playRound(playerChoice, computerChoice, playerScore, computerScore)
 
-  playerScore = scores[0]
-  computerScore = scores[1]
+    playerScore = scores[0]
+    computerScore = scores[1]
 
-  round += 1
+    round += 1
 
-  console.log("it's round:", round)
-  console.log('Your score is:', playerScore)
-  console.log('Computer score is:', computerScore)
+    console.log("it's round:", round)
+    console.log('Your score is:', playerScore)
+    console.log('Computer score is:', computerScore)
 
-  console.log('final scores. Computer:', computerScore, 'player:', playerScore)
-}
+    console.log('final scores. Computer:', computerScore, 'player:', playerScore)
+  }
+};
+
+function checkForRoundWinner (playerScore, computerScore) {
+  if (computerScore === 5) {
+    console.log('computer wins round')
+    alert('COMPUTER WINS ROUND!')
+  } else if (playerScore === 5) {
+    console.log('player wins round')
+    alert('PLAYER WINS ROUND!')
+  } else {
+    return false
+  }
+};
 
 const VALID_CHOICES = ['rock', 'paper', 'scissors']
 
@@ -86,14 +102,28 @@ const VALID_CHOICES = ['rock', 'paper', 'scissors']
 
 const choiceButtons = document.querySelectorAll('.choice')
 
-const playerScore = 0
-const computerScore = 0
+const resultDiv = document.querySelector('#result')
+const playerScoreDiv = document.querySelector('#player-score')
+const computerScoreDiv = document.querySelector('#computer-score')
+
+let playerScore = 0
+let computerScore = 0
 
 choiceButtons.forEach((button) => {
   // create click listener for each button
   button.addEventListener('click', () => {
-    playerChoice = button.id
+    const playerChoice = button.id
     const computerChoice = getComputerChoice()
     playRound(playerChoice, computerChoice, playerScore, computerScore)
+
+    const scores = playRound(playerChoice, computerChoice, playerScore, computerScore)
+
+    playerScore = scores[0]
+    computerScore = scores[1]
+
+    playerScoreDiv.textContent = 'player: ' + playerScore
+    computerScoreDiv.textContent = 'computer: ' + computerScore
+
+    checkForRoundWinner(playerScore, computerScore)
   })
 })
