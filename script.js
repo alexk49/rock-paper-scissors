@@ -52,6 +52,40 @@ function playRound (playerChoice, computerChoice, playerScore, computerScore) {
   return [playerScore, computerScore]
 }
 
+function clearBoard () {
+  resultDiv.innerText = ''
+
+  const scoreDivs = document.querySelectorAll('.score')
+
+  scoreDivs.forEach((score) => {
+    score.innerText = ''
+  })
+  playerScore = 0
+  computerScore = 0
+}
+
+function playGame (playerChoice) {
+  const computerChoice = getComputerChoice()
+  playRound(playerChoice, computerChoice, playerScore, computerScore)
+
+  const scores = playRound(playerChoice, computerChoice, playerScore, computerScore)
+
+  playerScore = scores[0]
+  computerScore = scores[1]
+
+  playerScoreDiv.textContent = 'player: ' + playerScore
+  computerScoreDiv.textContent = 'computer: ' + computerScore
+
+  const winner = checkForRoundWinner(playerScore, computerScore)
+
+  if (winner === 'computer' || winner === 'player') {
+    const again = writeFinalScore(winner)
+    if (again) {
+      clearBoard()
+    }
+  }
+};
+/*
 function playGame () {
   // play whole game of 5 rounds
   let round = 1
@@ -83,22 +117,32 @@ function playGame () {
     console.log('final scores. Computer:', computerScore, 'player:', playerScore)
   }
 };
+*/
 
 function checkForRoundWinner (playerScore, computerScore) {
   if (computerScore === 5) {
-    console.log('computer wins round')
-    alert('COMPUTER WINS ROUND!')
+    return 'computer'
   } else if (playerScore === 5) {
-    console.log('player wins round')
-    alert('PLAYER WINS ROUND!')
+    return 'player'
   } else {
     return false
   }
 };
 
-const VALID_CHOICES = ['rock', 'paper', 'scissors']
+function writeFinalScore (winner) {
+  const finalScoreDiv = document.querySelector('#final-score')
+  let again = ''
+  if (winner === 'computer') {
+    finalScoreDiv.innerText = 'You lost the game to the computer. Bad luck.'
+    again = confirm('You lost the game to the computer. Bad luck. Play again?')
+  } else {
+    finalScoreDiv.innerText = 'You won the game!'
+    again = confirm('You won the game! play again?')
+  }
+  return again
+};
 
-// playGame()
+const VALID_CHOICES = ['rock', 'paper', 'scissors']
 
 const choiceButtons = document.querySelectorAll('.choice')
 
@@ -113,17 +157,7 @@ choiceButtons.forEach((button) => {
   // create click listener for each button
   button.addEventListener('click', () => {
     const playerChoice = button.id
-    const computerChoice = getComputerChoice()
-    playRound(playerChoice, computerChoice, playerScore, computerScore)
-
-    const scores = playRound(playerChoice, computerChoice, playerScore, computerScore)
-
-    playerScore = scores[0]
-    computerScore = scores[1]
-
-    playerScoreDiv.textContent = 'player: ' + playerScore
-    computerScoreDiv.textContent = 'computer: ' + computerScore
-
-    checkForRoundWinner(playerScore, computerScore)
-  })
+    playGame(playerChoice)
+  }
+  )
 })
