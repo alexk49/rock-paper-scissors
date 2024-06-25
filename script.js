@@ -6,14 +6,26 @@ function getComputerChoice () {
 }
 
 function computerWins (playerChoice, computerChoice, computerScore) {
-// log computer winner
-  resultDiv.textContent = ('You lose: ' + computerChoice + ' beats ' + playerChoice)
+  // log computer winner
+  const computerWinMessage = ('You lose: ' + computerChoice + ' beats ' + playerChoice)
+
+  if (resultDiv.textContent === computerWinMessage) {
+    resultDiv.textContent = ("You lose again, you're really not good at this. " + computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1) + ' beats ' + playerChoice)
+  } else {
+    resultDiv.textContent = computerWinMessage
+  }
   return (computerScore += 1)
 }
 
 function playerWins (playerChoice, computerChoice, humanScore) {
 // log player winner
-  resultDiv.textContent = ('You win: ' + playerChoice + ' beats ' + computerChoice)
+  const winMessage = ('You win: ' + playerChoice + ' beats ' + computerChoice)
+  if (resultDiv.textContent === winMessage) {
+    // first letter of playerChoice has to be capitalised in message
+    resultDiv.textContent = ("You win again, you're getting good at this! " + playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1) + ' beats ' + computerChoice)
+  } else {
+    resultDiv.textContent = ('You win: ' + playerChoice + ' beats ' + computerChoice)
+  }
   return (humanScore += 1)
 }
 
@@ -45,9 +57,10 @@ function playRound (playerChoice, computerChoice, playerScore, computerScore) {
   return [playerScore, computerScore]
 }
 
-function clearBoard () {
+function resetGame () {
+  winnerDeclared = false
   resultDiv.innerText = ''
-
+  panicDiv.innerText = ''
   const scoreDivs = document.querySelectorAll('.score')
 
   scoreDivs.forEach((score) => {
@@ -71,9 +84,10 @@ function playGame (playerChoice) {
   const winner = checkForRoundWinner(playerScore, computerScore)
 
   if (winner === 'computer' || winner === 'player') {
-    const again = writeFinalScore(winner)
+    const again = writeFinalScore(winner, winnerDeclared)
+    winnerDeclared = true
     if (again) {
-      clearBoard()
+      resetGame()
     }
   }
 };
@@ -91,23 +105,26 @@ function checkForRoundWinner (playerScore, computerScore) {
 };
 
 function panic () {
-  const panicMessages = ['oh no', 'hey stop that', 'this is not how the game is meant to be played', 'PANICCCCCCCCCCCC', 'please stop']
-  const panicDiv = document.querySelector('#panic')
+  const panicMessages = ['oh no', 'hey stop that', 'this is not how the game is meant to be played', 'PANICCCCCCCCCCCC', 'please stop', "IT'S MEANT TO BE A GAME TO FIVE", 'pLeASe PREsS ThE rESeT BuTtON']
   const index = [Math.floor(Math.random() * panicMessages.length)]
   panicDiv.innerText = panicMessages[index]
 }
 
-function writeFinalScore (winner) {
-  const finalScoreDiv = document.querySelector('#final-score')
-  let again = ''
-  if (winner === 'computer') {
-    finalScoreDiv.innerText = 'You lost the game to the computer. Bad luck.'
-    again = confirm('You lost the game to the computer. Bad luck. Play again?')
+function writeFinalScore (winner, winnerDeclared) {
+  if (winnerDeclared === true) {
+    panic()
   } else {
-    finalScoreDiv.innerText = 'You won the game!'
-    again = confirm('You won the game! play again?')
+    const finalScoreDiv = document.querySelector('#final-score')
+    let again = ''
+    if (winner === 'computer') {
+      finalScoreDiv.innerText = 'You lost the game to the computer. Bad luck.'
+      again = confirm('You lost the game to the computer. Bad luck. Play again?')
+    } else {
+      finalScoreDiv.innerText = 'You won the game!'
+      again = confirm('You won the game! play again?')
+    }
+    return again
   }
-  return again
 };
 
 const VALID_CHOICES = ['rock', 'paper', 'scissors']
@@ -117,7 +134,10 @@ const choiceButtons = document.querySelectorAll('.choice')
 const resultDiv = document.querySelector('#result')
 const playerScoreDiv = document.querySelector('#player-score')
 const computerScoreDiv = document.querySelector('#computer-score')
+const panicDiv = document.querySelector('#panic')
 
+// needed to make panic messages show consistently
+let winnerDeclared = false
 let playerScore = 0
 let computerScore = 0
 
@@ -128,4 +148,9 @@ choiceButtons.forEach((button) => {
     playGame(playerChoice)
   }
   )
+})
+
+const resetButton = document.querySelector('#reset')
+resetButton.addEventListener('click', () => {
+  resetGame()
 })

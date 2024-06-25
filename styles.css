@@ -28,3 +28,27 @@ li,
 .score {
   padding: 4px;
 }
+
+#reset-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 60vh;
+}
+
+/*/ 
+#reset-container,
+#btn-holder {
+  justify-content: flex-end;
+  display: flex;
+  position: absolute;
+}
+*/
+
+#reset {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 4rem;
+  padding: 10px;
+}
