@@ -18,9 +18,14 @@ function playerWins (playerChoice, computerChoice, humanScore) {
 }
 
 function draw (playerChoice, computerChoice) {
-// log draw
-  resultDiv.textContent = ("It's a draw - player went: " + playerChoice + ' and computer went: ' + computerChoice)
-}
+  // log draw
+  const drawMessage = ("It's a draw - player went " + playerChoice + ' and computer went ' + computerChoice)
+  if (resultDiv.textContent === drawMessage) {
+    resultDiv.textContent = ("It's another draw! Player went " + playerChoice + ' and computer went ' + computerChoice)
+  } else {
+    resultDiv.textContent = drawMessage
+  }
+};
 
 function playRound (playerChoice, computerChoice, playerScore, computerScore) {
 // rock beats paper but loses to paper
@@ -54,7 +59,6 @@ function clearBoard () {
 
 function playGame (playerChoice) {
   const computerChoice = getComputerChoice()
-  playRound(playerChoice, computerChoice, playerScore, computerScore)
 
   const scores = playRound(playerChoice, computerChoice, playerScore, computerScore)
 
