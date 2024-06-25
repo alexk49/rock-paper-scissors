@@ -1,0 +1,30 @@
+body {
+  margin: 0;
+}
+
+h2,
+li,
+#scores,
+#result,
+#panic {
+  text-align: center;
+}
+
+#choices {
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+  flex-wrap: wrap;
+}
+
+.choice {
+  padding: 8px;
+  margin: 10px;
+}
+
+#scores,
+#result,
+#panic,
+.score {
+  padding: 4px;
+}
