@@ -5,33 +5,21 @@ function getComputerChoice () {
   return VALID_CHOICES[choice]
 }
 
-function getHumanChoice () {
-// get play choice of valid choices
-  let choice = ''
-  while (VALID_CHOICES.includes(choice) === false) {
-    choice = prompt('rock, paper, scissors?').toLowerCase()
-  }
-  return choice
-}
-
 function computerWins (playerChoice, computerChoice, computerScore) {
 // log computer winner
   resultDiv.textContent = ('You lose: ' + computerChoice + ' beats ' + playerChoice)
-  console.log('You lose!', computerChoice, 'beats:', playerChoice)
   return (computerScore += 1)
 }
 
 function playerWins (playerChoice, computerChoice, humanScore) {
 // log player winner
   resultDiv.textContent = ('You win: ' + playerChoice + ' beats ' + computerChoice)
-  console.log('You win!', playerChoice, 'beats:', computerChoice)
   return (humanScore += 1)
 }
 
 function draw (playerChoice, computerChoice) {
 // log draw
   resultDiv.textContent = ("It's a draw - player went: " + playerChoice + ' and computer went: ' + computerChoice)
-  console.log("It's a draw - player went:", playerChoice, 'and computer went', computerChoice)
 }
 
 function playRound (playerChoice, computerChoice, playerScore, computerScore) {
@@ -85,49 +73,25 @@ function playGame (playerChoice) {
     }
   }
 };
-/*
-function playGame () {
-  // play whole game of 5 rounds
-  let round = 1
-
-  let playerScore = 0
-  let computerScore = 0
-
-  while (round < 5) {
-    console.log("let's play!")
-
-    const computerChoice = getComputerChoice()
-
-    const playerChoice = getHumanChoice()
-
-    console.log('Computer choice:', computerChoice)
-    console.log('player choice:', playerChoice)
-
-    const scores = playRound(playerChoice, computerChoice, playerScore, computerScore)
-
-    playerScore = scores[0]
-    computerScore = scores[1]
-
-    round += 1
-
-    console.log("it's round:", round)
-    console.log('Your score is:', playerScore)
-    console.log('Computer score is:', computerScore)
-
-    console.log('final scores. Computer:', computerScore, 'player:', playerScore)
-  }
-};
-*/
 
 function checkForRoundWinner (playerScore, computerScore) {
   if (computerScore === 5) {
     return 'computer'
   } else if (playerScore === 5) {
     return 'player'
+  } else if (playerScore > 5 || computerScore > 5) {
+    panic()
   } else {
     return false
   }
 };
+
+function panic () {
+  const panicMessages = ['oh no', 'hey stop that', 'this is not how the game is meant to be played', 'PANICCCCCCCCCCCC', 'please stop']
+  const panicDiv = document.querySelector('#panic')
+  const index = [Math.floor(Math.random() * panicMessages.length)]
+  panicDiv.innerText = panicMessages[index]
+}
 
 function writeFinalScore (winner) {
   const finalScoreDiv = document.querySelector('#final-score')
